@@ -91,7 +91,7 @@
 		-- if necessary, adjust to internal 'len' based format
 		if type(input[2]) == 'number' and mode == 'end' then
 			local adjusted_len = input[2] - input[1]
-			if adjusted_var >= 0 then
+			if adjusted_len >= 0 then
 				input[2] = adjusted_len
 			end
 		end
