@@ -1,0 +1,12 @@
+<ActorFrame>
+	<children>
+		<!--
+		<Actor Type = "ActorProxy" NameCommand = "%xero.name.player1" />
+		<Actor Type = "ActorProxy" NameCommand = "%xero.name.player2" />
+		<Actor Type = "ActorProxy" NameCommand = "%xero.name.player1judgment" />
+		<Actor Type = "ActorProxy" NameCommand = "%xero.name.player2judgment" />
+		<Actor Type = "ActorProxy" NameCommand = "%xero.name.player1combo" />
+		<Actor Type = "ActorProxy" NameCommand = "%xero.name.player2combo" />
+		-->
+	</children>
+</ActorFrame>

@@ -1,0 +1,119 @@
+<html>
+	<head>
+		<title>XeroOl's Galaxy Mod Loader v0.2.1: documentation</title>
+		<!--Style is from Lua's Documentation-->
+		<style type="text/css">html {background-color: #F8F8F8 ;}body {background-color: #FFFFFF ;color: #000000 ;font-family: Helvetica, Arial, sans-serif ;text-align: justify ;line-height: 1.25 ;margin: 16px auto ;padding: 32px ;border: solid #ccc 1px ;border-radius: 20px ;max-width: 70em ;width: 90% ;}h1, h2, h3, h4 {color: #000080 ;font-family: Verdana, Geneva, sans-serif ;font-weight: normal ;font-style: normal ;text-align: left ;}h1 {font-size: 28pt ;}h1 img {vertical-align: text-bottom ;}h2:before {content: "\2756" ;padding-right: 0.5em ;}a {text-decoration: none ;}a:link {color: #000080 ;}a:link:hover, a:visited:hover {background-color: #D0D0FF ;color: #000080 ;border-radius: 4px ;}a:link:active, a:visited:active {color: #FF0000 ;}div.menubar {padding-bottom: 0.5em ;}p.menubar {margin-left: 2.5em ;}.menubar a:hover  {margin: -3px -3px -3px -3px ;padding: 3px  3px  3px  3px ;border-radius: 4px ;}:target {background-color: #F0F0F0 ;margin: -8px ;padding: 8px ;border-radius: 8px ;outline: none ;}hr {display: none ;}table hr {background-color: #a0a0a0 ;color: #a0a0a0 ;border: 0 ;height: 1px ;display: block ;}.footer {color: gray ;font-size: x-small ;text-transform: lowercase ;}input[type=text] {border: solid #a0a0a0 2px ;border-radius: 2em ;background-repeat: no-repeat ;background-position: 4px center ;padding-left: 20px ;height: 2em ;}pre.session {background-color: #F8F8F8 ;padding: 1em ;border-radius: 8px ;}table {border: none ;border-spacing: 0 ;border-collapse: collapse ;}td {padding: 0 ;margin: 0 ;}td.gutter {width: 4% ;}table.columns td {vertical-align: top ;padding-bottom: 1em ;text-align: justify ;line-height: 1.25 ;}table.book td {vertical-align: top ;}table.book td.cover {padding-right: 1em ;}table.book img {border: solid #000080 1px ;}table.book span {font-size: small ;text-align: left ;display: block ;margin-top: 0.25em ;}p.logos a:link:hover, p.logos a:visited:hover {background-color: inherit ;}img {background-color: white ;}h3 code {font-family: inherit ;font-size: inherit ;}pre, code {font-size: 12pt ;}span.apii {color: gray ;float: right ;font-family: inherit ;font-style: normal ;font-size: small ;}</style>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<h1>XeroOl's Galaxy Mod Loader</h1>
+		<div class = "menubar">
+			<a href = "#introduction">Introduction</a> ·
+			<a href = "#configuration">Configuration</a> ·
+			<a href = "#globals">Globals</a> ·
+			<a href = "#xml">XML</a> ·
+			<a href = "#lua">Lua</a> ·
+			<a href = "#eases">Eases</a>
+		</div>
+		<h2><a name = "introduction">Introduction</a></h2>
+		<p>XeroOl's Galaxy Mod Loader (XGML) is a framework for scheduling, specifying, and applying mods and other lua commands for OpenITG and NotITG. To use it, copy the contents of XGML into your song's folder. Make sure that the file <code>default.xml</code> is in the same directory as your song's <code>.sm</code>. To tell OpenITG/NotITG to activate XGML, either use the provided <code>file.sm</code>, or making sure that your <code>.sm</code> has the following line:</p>
+		<pre>	#FGCHANGES:0.000=.=1.000=0=0=1=====,;</pre>
+		<p>This line tells the game to load XGML when the song is played.</p>
+		<h2><a name = "configuration">Configuration</a></h2>
+		<p>You can find the configuration files at the top of <code>default.xml</code>. As of now, there is only one configuration option for XGML, <code><a href = "#max_pn">MAX_PN</a></code>.</p>
+		<h3><a name = "max_pn"><code>MAX_PN</code></a></h3>
+		<p>The maximum number of players to process. XGML is able to support more than 2 players when used for NotITG. However, each player has extra processing cost to support. If extra players are being used, adjust the value of <code><a href = "#max_pn">MAX_PN</a></code> to reflect the number of players you plan on using. The players still need to be activated separately.</p>
+		<h2><a name = "globals">Globals</a></h2>
+		<p>Here is a list of variables that are set by default in XGML's environment.</p>
+		<h3><a name = "scx"><code>scx</code></a></h3>
+		<p>Represents the <code>x</code> position of the center of the screen in pixels. Is equal to <code>SCREEN_CENTER_X</code>.</p>
+		<h3><a name = "scy"><code>scy</code></a></h3>
+		<p>Represents the <code>y</code> position of the center of the screen in pixels. Is equal to <code>SCREEN_CENTER_Y</code>.</p>
+		<h3><a name = "sw"><code>sw</code></a></h3>
+		<p>Represents the width of the screen in pixels. Is equal to <code>SCREEN_WIDTH</code>.</p>
+		<h3><a name = "sh"><code>sh</code></a></h3>
+		<p>Represents the height of the screen in pixels. Is equal to <code>SCREEN_HEIGHT</code>.</p>
+		<h3><a name = "srat"><code>srat</code></a></h3>
+		<p>Represents the screen ratio, ie, the width of the screen over the height of the screen. Is equal to <code>SCREEN_WIDTH / SCREEN_HEIGHT</code>.</p>	
+		<h2><a name = "xml">XML</a></h2>
+		<p>Sometimes, you want to add extra actors to your song. <a href = "https://sm.heysora.net/doc/">Heysora's NotITG Documentation</a> is a good resource for learning how to create actors with XML. XGML provides <code>lua/actors.xml</code> as a location to create foreground elements. In order for your XML to interact with XGML's environment nicely, it is important to use <code><a href = "#xero">xero</a></code>. There are other XGML functions as well that are meant specifically for streamlining the process of creating XML actors, and integrating them into XGML.</p>
+		<h3><a name = "xero"><code>xero (function(self) ··· end)</code></a></h3>
+		<p>Changes a function to use XGML's environment. Every <code>Command</code> that interacts with XGML should be wrapped with <code><a href = "#xero">xero</a></code>. An example for how it can be used is the XML structure of <code>lua/mods.xml</code>.</p>
+		<pre>	&lt;Layer<br />	    Type = "Quad"<br />	    ModCommand = "%<a href = "#xero">xero</a>(function(self) ··· end)"<br />	/&gt;</pre>
+		<p>This is necessary in order to access XGML environment variables such as <code><a href = "#scx">scx</a></code> or <code><a href = "#scy">scy</a></code> from your command.</p>
+		<h3><a name = "namecommand"><code>NameCommand</code></a></h3>
+		<p>A command that gets called on all actors in <code>lua/actors.xml</code> once on beat <code>0</code>, after <code>OnCommand</code> is called, but before the <a href = "#lua">Lua</a> in <code>lua/mods.xml</code> is called. Meant for use with <code><a href = "#name">xero.name</a></code>.</p>
+		<h3><a name = "name"><code>xero.name.&lt;name&gt;</code></a></h3>
+		<p>Shorter equivalent to <code><a href = "#xero">xero</a>(function(self) <a href = "#actors">actors</a>.&lt;name&gt; = self end)</code>. Meant to be used inside of a <code><a href = "#namecommand">NameCommand</a></code>.</p>
+		<pre>	&lt;Layer<br/>	    Type = "Quad"<br/>	    <a href = "#namecommand">NameCommand</a> = "%<a href = "#name">xero.name</a>.my_quad"<br/>	/&gt;</pre>
+		<p>Then, in the <a href = "#lua">Lua</a>, you can access the actor with <code><a href = "#actors">actors</a>.myquad</code>.</p>
+		<h3><a name = "aft"><code>xero.aft</code></a></h3>
+		<p>Function to set up an <code>ActorFrameTexture</code> to capture the entire screen. You do <b>not</b> need to worry about <code>aftMult</code> when using these <code>AFT</code>s. Is equivalent to the following code.</p>
+		<pre>	function(self)<br />	    self:SetWidth(DISPLAY:GetDisplayWidth())<br />	    self:SetHeight(DISPLAY:GetDisplayHeight())<br />	    self:EnableDepthBuffer(false)<br />	    self:EnableAlphaBuffer(false)<br />	    self:EnableFloat(false)<br />	    self:EnablePreserveTexture(true)<br />	    self:Create()<br />	end</pre>
+		<p>The intended use for this function is to make XML for <code>AFT</code>s more concise. Here is an example usage for <code><a href = "#aft">xero.aft</a></code>.</p>
+		<pre>	&lt;Layer<br />	    Type = "ActorFrameTexture"<br />	    <a href = "#namecommand">NameCommand</a> = "%<a href = "#name">xero.name</a>.aft1"<br />	    InitCommand = "%<a href = "#aft">xero.aft</a>"<br />	/&gt;</pre>
+		<p>This code would create an <code>ActorFrameTexture</code> named <code>aft1</code>.</p>
+		<h3><a name = "sprite"><code>xero.sprite</code></a></h3>
+		<p>Function to set up a <code>Sprite</code> to cover the screen. Specifically intended for <code>Sprite</code>s with <code>AFT</code> textures. Note that <code><a href = "#sprite">xero.sprite</a></code> does not set the texture. <code><a href = "#sprite">xero.sprite</a></code> is equivalent to the following code.</p>
+		<pre>	function(self)<br />	    self:basezoomx((SCREEN_WIDTH/DISPLAY:GetDisplayWidth()))<br />	    self:basezoomy(-1*(SCREEN_HEIGHT/DISPLAY:GetDisplayHeight()))<br />	    self:x(<code><a href = "#scx">scx</a></code>)<br />	    self:y(<code><a href = "#scy">scy</a></code>)<br />	end</pre>
+		<p>The intended use for this function is to make the XML for <code>Sprite</code>s more concise. Here is an example usage for <code><a href = "#sprite">xero.sprite</a></code>.</p>
+		<pre>	&lt;Layer<br />	    Type = "Sprite"<br />	    <a href = "#namecommand">NameCommand</a> = "%<a href = "#name">xero.name</a>.sprite1"<br />	    InitCommand = "%<a href = "#sprite">xero.sprite</a>"<br />	/&gt;</pre>
+		<p>This code would create a Sprite named <code>sprite1</code>.</p>
+		<p>Setting the texture of a sprite still needs to be done separately, in the <a href = "#lua">lua</a>. For example, if you have an <code>AFT</code> named <code>aft1</code> and a <code>Sprite</code> named <code>sprite1</code>, you would need to set the texture with <code><a href = "#actors">actors</a>.sprite1:SetTexture(<a href = "#actors">actors</a>.aft1:GetTexture())</code> in order to have the <code>AFT</code> effect work.</p>
+		<h3><a name = "image"><code>xero.image</code></a></h3>
+		<p>Function to set up an image to cover up the screen. Works with <code>Quad</code>s and <code>Sprite</code>s. Is equivalent to the following code.</p>
+		<pre>	function(self)<br />	    self:scaletofit(0, 0, <a href = "#sw">sw</a>, <a href = "#sh">sh</a>)<br />	end</pre>
+		<p>The intended use for this function is to make the XML for making screen-covering actors more concise. Here is an example usage for <code><a href = "#image">xero.image</a></code>.</p>
+		<pre>	&lt;Layer<br />	    File = "image.png"<br />	    <a href = "#namecommand">NameCommand</a> = "%<a href = "#name">xero.name</a>.image1"<br />	    InitCommand = "%<a href = "#image">xero.image</a>"<br />	/&gt;</pre>
+		<p>I use screen-covering actors a lot for zbuffer, masking, blending, and other complex <code>AFT</code> effects.</p>
+		<p>Remember that <a href = "#aft"><code>xero.aft</code></a>, <a href = "#sprite"><code>xero.sprite</code></a>, and <a href = "#image"><code>xero.image</code></a> are just helper functions. You don't need to initialize all actors with one of these; You can also write your own <code>InitCommand</code>s to do whatever you want.</p>
+		<h2><a name = "lua">Lua</a></h2>
+		<p>In order to add mods and other effects, you need to run Lua code. XGML provides the file <code>lua/mods.xml</code> which you can use to schedule functions, eases, and perframes, using the following functions. The <code>ModCommand</code> in <code>lua/mods.xml</code> will get called exactly once after the <code><a href = "#namecommand">NameCommand</a></code>s are called.</p>
+		<h3><a name = "ease_engine">Ease Engine</a></h3>
+		<p>Mods are scheduled using something called an ease engine. Changes in mod values are represented by an ease entry. For example, if you want <code>invert</code> to turn on from beat <code>20</code> to beat <code>30</code>, you would make an ease entry to turn on <code>invert</code> at beat <code>20</code>, and another ease entry to turn it off on beat <code>30</code>. If you turn a mod on without turning it off, it will remain on for the rest of the file.</p>
+		<h3><a name = "ease"><code>ease {start_beat, length, my_ease, percent1, mod1, ··· [, pn = player]}</code></a></h3>
+		<p>Used to schedule ease entries. Takes in an entry, and schedules it to be applied during the specified beat range.</p>
+		<p>An ease entry is just a table with data describing an easing mod. Here is the data that makes an ease entry.</p>
+		<ul>
+			<li><b><code>[1]</code> <code>start_beat</code>:</b> The time, in beats, that the ease starts.</li>
+			<li><b><code>[2]</code> <code>length</code>:</b> The length, in beats, of the ease effect.</li>
+			<li><b><code>[3]</code> <code>my_ease</code>:</b> The <a href = "#eases">ease function</a> that this ease entry uses. Any function that accepts and returns numbers can work as an ease function. Given an ease function <code>my_ease</code>, the value <code>my_ease(0)</code> would represent the ease curve at <code>start_beat</code> and <code>my_ease(1)</code> would represent the ease curve at <code>start_beat + length</code>.</li>
+			<li><b><code>[4, 6, ···]</code> <code>percent</code>:</b> The amount in percent that a given mod will change.</li>
+			<li><b><code>[5, 7, ···]</code> <code>mod</code>:</b> The mod, or <code><a href = "#ease_var">ease var</a></code>, that should be eased. This is case sensitive. Every occurance of a particular mod name needs to be typed with the same capitalization. For mods, the standard convention is to type the mod names entirely in lowercase.</li>
+			<li><b><code>['pn']</code>:</b> An optional argument to set a specific player to affect. If set to <code>0</code>, that ease entry will affect all players. If not set, the ease entry will behave as if it is set to <code>0</code>, affecting all players.</li>
+		</ul>
+		<p>You can add as many <code>percent</code>s and <code>mod</code>s as you want to an ease entry.</p>
+		<p>Here are some example calls to <code><a href = "#ease">ease</a></code>.
+		<pre>	ease {19, 2, inOutExpo, 100, 'invert'}<br />	ease {29, 2, inOutExpo, -100, 'invert'}<br />	ease {5, 1, outExpo, 360, 'rotationz', -628, 'confusionoffset'}<br />	ease {10, 0, instant, 100, 'bumpyx', pn = 2}</pre>
+		<p>One feature not shown here is that you can chain-call <code><a href = "#ease">ease</a></code> with multiple ease entries in a row.</p>
+		<h3><a name = "ease_to"><code>ease_to {start_beat, length, my_ease, percent1, mod1, ··· [, pn = player]}</code></a></h3>
+		<p>Its like <code><a href = "#ease">ease</a></code>, except the percentages are interpreted as actual target percentages, not offset percentages. Here are some example calls to <code><a href = "#ease_to">ease_to</a></code>.<p>
+		<pre>	ease_to {19, 2, inOutExpo, 100, 'invert'}<br />	ease_to {29, 2, inOutExpo, 0, 'invert'}<br />	ease_to {50, 10, outBounce(5), 360, 'rotationz', 100, 'flip', pn = 1}<br />	ease_to {100, 0, instant, 0, 'spiralholds'}</pre>
+		<p>One feature not shown here is that you can chain-call <code><a href = "#ease_to">ease_to</a></code> with multiple ease entries in a row.</p>
+		<h3><a name = "ease_var"><code>ease_var (name [, effect])</code></a></h3>
+		<p>Adds a new ease variable. Takes in the name of the ease variable, and an optional function. Makes the named string into an ease variable. If no function is given, the ease variables don't have any effect, which could be useful with perframes that read the value from the ease variable. If a function is given, then for every frame that the value isn't <code>0</code>, your function will be called. The first argument will be the percentage of the mod. The second argument will be the player number. If it is meant to be applied to all players, the player number will be <code>0</code>. If your function returns a string, that string will be applied as a mod to <code>ApplyGameCommand</code>. Here are some examples of ease_var.</p>
+		<pre>	<br />	-- ease var with no effect (useful for perframes)<br />	ease_var('blacksphere')<br />	<br />	-- ease var to ease properties of non-player actors<br />	ease_var('background_rotation', function(percent)<br />	    <br />	    actors.background:rotationz(percent)<br />	    <br />	end)<br />	<br />	-- ease var to ease properties of players<br />	ease_var('fov', function(percent, pn)<br />	    <br />	    if pn == 0 then<br />	        -- 0 means all players<br />	        <br />	        for i = 1, MAX_PN do<br />	            plr[i]:fov(percent)<br />	        end<br />	        <br />	    else<br />	        -- specific player<br />	        plr[pn]:fov(percent)<br />	        <br />	    end<br />	    <br />	end)<br />	<br />	-- ease var for mod string format exceptions<br />	ease_var('xmod', function(percent)<br />	    <br />	    return '*-1 ' .. percent .. 'x'<br />	    <br />	end)</pre>
+		<p>The last example is actually how XGML handles the <code>xmod</code> and <code>cmod</code> mod string exceptions internally.</p>
+		<h3><a name = "func"><code>func {start_beat, [end_beat,] my_function}</code></a></h3>
+		<p>Adds a function as either a perframe or a one-time function. If no <code>end_beat</code> is provided, the function is scheduled to run once, as close as possible to <code>start_beat</code>. This means that all one-time functions are persistent. If you want a function to not behave persistently, then the function can check the beat and only run in a given range. Functions take in a couple of arguments.</p>
+		<ul>
+			<li><code><b>[1]</b> <b>beat</b></code>: The number of beats that have passed <b>since start_beat</b>.</li>
+			<li><code><b>[2]</b> <b>mods</b></code>: A table that represents all the currently active mods. </li>
+		</ul>
+		<p>With <code>mods</code>, you can read and change the amount which mods are active. You can access a specific mod's value with <code>mods[pn].&lt;mod_name&gt;</code>, where <code>pn</code> is the player number, or <code>0</code> for all players. For example, if you want to look at how much <code>invert</code> is being applied to all players, you would read <code>mods[0].invert</code>. If a mod isn't active, then the value will be <code>0</code>, not <code>nil</code>.</p>
+		<p>Player-specific mods are pretty simple to understand. The way player specific mods work is similar to the way that column specific mods work in <code>NotITG</code>, where the actual activation of a given player is equal to the activation amount stored in <code>mods[0]</code> plus the player specific activation stored in <code>mods[pn]</code>.</p>
+		<p>Here are some example calls to <code><a href = "#func">func</a></code>.</p>
+		<pre>	func {16, function(beat)<br />	    <br />	    -- for every player<br />	    for pn = 1, MAX_PN do<br />	        <br />	        -- set to center of screen<br />	        plr[pn]:x(scx)<br />	        <br />	    end<br />	end}<br />	<br />	func {0, 100, function(beat, mods)<br />	    <br />	    -- read from flip<br />	    local multiplier = 1 - mods[0].flip * 0.02<br />	    <br />	    -- scale tornado to match flip<br />	    mods[0].tornado = mods[0].tornado * multiplier<br />	    <br />	end}</pre>
+		<p>One feature not shown here is that you can chain-call <code><a href = "#func">func</a></code> with multiple func entries in a row.</p>
+		<h3><a name = "plr"><code>plr</code></a></h3>
+		<p>You can get the player actors themselves with the <code><a href = "#plr">plr</a></code> table. <code>PlayerP1</code> is in <code><a href = "#plr">plr</a>[1]</code>, <code>PlayerP2</code> is stored in <code><a href = "#plr">plr</a>[2]</code>, etc., up to <a href = "#max_pn">MAX_PN</a>.</p>
+		<p>If you're using the players to read notedata, and you're not sure which players exist, you can use <code><a href = "#plr">plr</a>[0]</code>, which is equal to <code>PlayerP1</code> if <code>PlayerP1</code> exists, or <code>PlayerP2</code> otherwise.</p>
+		<h3><a name = "actors"><code>actors</code></a></h3>
+		<p>A table for storing actors. You can put your own actors here using <code><a href = "#namecommand">NameCommand</a></code>. If you have an actor set up like this,</p>
+		<pre>	&lt;Layer<br/>	    Type = "Quad"<br/>	    <a href = "#namecommand">NameCommand</a> = "%<a href = "#name">xero.name</a>.my_quad"<br/>	/&gt;</pre>
+		<p>you can access the actor using <code><a href = "#actors">actors</a>.my_quad</code>.</p>
+		<h2><a name = "eases">Eases</a></h2>
+		<p>Although any function works as an ease, XGML provides many functions designed for ease use. Here's a list of all of the eases in XGML.</p>
+		<pre>instant<br />bounce<br />bell<br />pop<br />kick(amt)<br />tap<br />circ<br />square<br />tri<br />tooth<br />spike<br />cosc<br />sinc<br />inverse<br />linear<br />inQuad<br />outQuad<br />inOutQuad<br />inCubic<br />outCubic<br />inOutCubic<br />inQuart<br />outQuart<br />inOutQuart<br />inQuint<br />outQuint<br />inOutQuint<br />inExpo<br />outExpo<br />inOutExpo<br />inBack(amt)<br />outBack(amt)<br />inOutBack(amt)<br />inElastic(amt)<br />outElastic(amt)<br />inOutElastic(amt)<br />inBounce(amt)<br />outBounce(amt)<br />inOutBounce(amt)</pre>
+	</body>
+</html>

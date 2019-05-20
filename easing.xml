@@ -1,4 +1,4 @@
-<Layer Condition = "xero(function()
+<Layer Condition = "xero(function() -- By XeroOl
 	local sqrt = math.sqrt
 	local abs = math.abs
 	local pow = math.pow
@@ -22,6 +22,15 @@
 	
 	function pop(t)
 		return (t == 1) and 0 or (3.5 * (1 - t) * (1 - t) * sqrt(t))
+	end
+	
+	local kick_cache = {}
+	
+	function kick(amt)
+		kick_cache[amt] = kick_cache[amt] or function(t)
+			return (sqrt(t) * pow(1 - t, amt)) * (2.5 + n * .6)
+		end
+		return kick_cache[amt]
 	end
 	
 	function tap(t)
@@ -168,7 +177,7 @@
 	function inBack(m)
 		local m1 = m + 1
 		inBack_cache[m] = inBack_cache[m] or function(t)
-			return (t == 1) and 1 or t * t * (t * m1 - m)
+			return (t == 1) and 1 or t * t * t * (t * t * m1 - m)
 		end
 		return inBack_cache[m]
 	end
@@ -179,7 +188,7 @@
 		local m1 = m + 1
 		outBack_cache[m] = outBack_cache[m] or function(t)
 			t = 1 - t
-			return (t == 0) and 1 or 1 - t * t * (t * m1 - m)
+			return (t == 0) and 1 or 1 - t * t * t * (t * t* m1 - m)
 		end
 		return outBack_cache[m]
 	end
