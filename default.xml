@@ -76,6 +76,28 @@
 		return xero.ease_var
 	end
 	
+	-- holds the timing mode
+	local timing_mode = 'len'
+	
+	-- setter for timing mode
+	function xero.set_timing_mode(mode)
+		timing_mode = (mode == 'end') and 'end' or 'len'
+	end
+	
+	-- converts an input to len mode
+	local function timing_mode_adjust(input)
+		local mode = input.mode or timing_mode
+		
+		-- if necessary, adjust to internal 'len' based format
+		if type(input[2]) == 'number' and mode == 'end' then
+			local adjusted_len = input[2] - input[1]
+			if adjusted_var >= 0 then
+				input[2] = adjusted_len
+			end
+		end
+		
+	end
+	
 	-- ease table
 	local mod_ease = {}
 	local mod_ease_active = {}
@@ -84,6 +106,7 @@
 
 	-- ease table insert
 	function xero.ease(input)
+		timing_mode_adjust(input)
 		mod_ease_length = mod_ease_length + 1
 		mod_ease[mod_ease_length] = input
 		return xero.ease
@@ -104,6 +127,8 @@
 	
 	-- func table insert
 	function xero.func(input)
+		
+		timing_mode_adjust(input)
 		
 		if type(input[2]) == 'function' then
 			input[2], input[3] = nil, input[2]
