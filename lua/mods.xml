@@ -13,6 +13,7 @@
 			pj:xy(scx * (pn - .5), scy)
 			pc:sleep(9e9)
 			pj:sleep(9e9)
+		end
 	end
 	]]
 	

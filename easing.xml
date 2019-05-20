@@ -28,7 +28,7 @@
 	
 	function kick(amt)
 		kick_cache[amt] = kick_cache[amt] or function(t)
-			return (sqrt(t) * pow(1 - t, amt)) * (2.5 + n * .6)
+			return (sqrt(t) * pow(1 - t, amt)) * (2.5 + amt * .6)
 		end
 		return kick_cache[amt]
 	end

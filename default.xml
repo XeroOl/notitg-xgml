@@ -60,7 +60,9 @@
 		
 		-- full screen actor function
 		function xero.image(self)
-			self:scaletofit(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)
+			actor:zoomto(SCREEN_WIDTH, SCREEN_HEIGHT)
+			actor:x(SCREEN_CENTER_X)
+			actor:y(SCREEN_CENTER_Y)
 		end
 	end
 	
@@ -222,6 +224,7 @@
 		local val = 5
 		while entry[val] do
 			mod_base[pn][entry[val]] = mod_base[pn][entry[val]] + target * entry[val - 1]
+			mod_values[pn][entry[val]] = mod_values[pn][entry[val]] + target * entry[val - 1]
 			val = val + 2
 		end
 		
@@ -260,6 +263,15 @@
 			old_time = cur_time
 			beat = GAMESTATE:GetSongBeat()
 			
+			-- initialize mod_values to mod_base
+			mod_values = {}
+			for pn = 0, MAX_PN do
+				mod_values[pn] = setmetatable({}, nil_as_0_metatable)
+				for mod, percent in pairs(mod_base.data[pn]) do
+					mod_values[pn][mod] = percent
+				end
+			end
+			
 			-- mod eases
 			while mod_ease_next <= mod_ease_length do
 				local entry = mod_ease[mod_ease_next]
@@ -273,15 +285,6 @@
 				mod_ease[mod_ease_next] = nil
 				mod_ease_next = mod_ease_next + 1
 				
-			end
-			
-			-- initialize mod_values to mod_base
-			mod_values = {}
-			for pn = 0, MAX_PN do
-				mod_values[pn] = setmetatable({}, nil_as_0_metatable)
-				for mod, percent in pairs(mod_base.data[pn]) do
-					mod_values[pn][mod] = percent
-				end
 			end
 			
 			-- active mod eases
