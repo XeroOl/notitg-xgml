@@ -1,0 +1,10 @@
+<Layer Type = "Quad" ModCommand = "%xero(function(self)
+	
+	ease{0, 0, instant,
+		2, 'xmod',
+		100, 'dizzyholds',
+		100, 'stealthpastreceptors',
+		100, 'reversetype',
+	}
+	
+end)"/>
