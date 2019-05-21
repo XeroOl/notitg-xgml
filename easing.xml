@@ -24,6 +24,10 @@
 		return (t == 1) and 0 or (3.5 * (1 - t) * (1 - t) * sqrt(t))
 	end
 	
+	function elastic(t)
+		return pow(50, -t) * sin(t * 3 * pi) * 1.76
+	end
+	
 	local kick_cache = {}
 	
 	function kick(amt)

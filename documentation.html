@@ -115,7 +115,17 @@
 		<pre>	&lt;Layer<br/>	    Type = "Quad"<br/>	    <a href = "#namecommand">NameCommand</a> = "%<a href = "#name">xero.name</a>.my_quad"<br/>	/&gt;</pre>
 		<p>you can access the actor using <code><a href = "#actors">actors</a>.my_quad</code>.</p>
 		<h2><a name = "eases">Eases</a></h2>
-		<p>Although any function works as an ease, XGML provides many functions designed for ease use. Here's a list of all of the eases in XGML.</p>
-		<pre>instant<br />bounce<br />bell<br />pop<br />kick(amt)<br />tap<br />circ<br />square<br />tri<br />tooth<br />spike<br />cosc<br />sinc<br />inverse<br />linear<br />inQuad<br />outQuad<br />inOutQuad<br />inCubic<br />outCubic<br />inOutCubic<br />inQuart<br />outQuart<br />inOutQuart<br />inQuint<br />outQuint<br />inOutQuint<br />inExpo<br />outExpo<br />inOutExpo<br />inBack(amt)<br />outBack(amt)<br />inOutBack(amt)<br />inElastic(amt)<br />outElastic(amt)<br />inOutElastic(amt)<br />inBounce(amt)<br />outBounce(amt)<br />inOutBounce(amt)</pre>
+		<p>Although any function works as an ease, XGML provides many functions designed for ease use. Here's a list of all of the eases in XGML, classified by persistence.</p>
+		<table class = "columns"><tbody>
+		<td width = "45%">
+			<h3>Persistent Eases</h3>
+			<pre>instant<br/>linear<br/>inQuad<br/>outQuad<br/>inOutQuad<br/>inCubic<br/>outCubic<br/>inOutCubic<br/>inQuart<br/>outQuart<br/>inOutQuart<br/>inQuint<br/>outQuint<br/>inOutQuint<br/>inExpo<br/>outExpo<br/>inOutExpo<br/>inBack(amt)<br/>outBack(amt)<br/>inOutBack(amt)<br/>inElastic(amt)<br/>outElastic(amt)<br/>inOutElastic(amt)<br/>inBounce(amt)<br/>outBoumce(amt)<br/>inOutBounce(amt)</pre>
+		</td>
+		<td class = "gutter"/>
+		<td width = "45%">
+			<h3>Transient Eases</h3>
+			<pre>bounce<br/>bell<br/>pop<br/>elastic<br/>kick(amt)<br/>tap<br/>circ<br/>square<br/>tri<br/>tooth<br/>spike<br/>cosc<br/>sinc<br/>inverse</pre>
+		</td>
+		</tbody></table>
 	</body>
 </html>
