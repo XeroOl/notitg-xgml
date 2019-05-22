@@ -66,35 +66,77 @@
 		end
 	end
 	
-	local function throw(exception)
-		local _, err = pcall(error, exception, 4)
+	local function throw(exception, level)
+		level = level or 5
+		local _, err = pcall(error, exception, level)
 		SCREENMAN:SystemMessage(err)
 	end
 	
-	-- exceptions for how to apply mods	local 
-	ease_vars = {}
-	
-	-- add new exceptions to ease_vars
-	function xero.ease_var(mod, value)
-		value = value or true
-		ease_vars[mod] = value
-		return xero.ease_var
-	end
-	
 	-- holds the timing mode
+	local valid_timing_modes = {['len'] = true, ['end'] = true}
 	local timing_mode = 'len'
-	local valid_modes = {['len'] = true, ['end'] true}
+	
 	
 	-- setter for timing mode
 	function xero.set_timing_mode(mode)
-		if valid_modes[mode] then
-			timing_mode = mode
+		if not valid_timing_modes[mode] then
+			throw('invalid mode \'' .. mode .. '\'', 4)
 		else
-			throw('invalid mode ' .. mode)
+			timing_mode = mode
 		end
-end
+	end
 	
-	-- converts an input to len mode
+	-- verifier for ease and ease_to
+	local function check_valid_ease(input, function_name)
+		if type(input) ~= 'table' then
+			throw('\'{\' expected near \''.. function_name ..'\'')
+		elseif type(input[1]) ~= 'number' then
+			throw('invalid start beat \'' .. tostring(input[1]) .. '\'')
+		elseif type(input[2]) ~= 'number' then
+			throw('invalid ' .. timing_mode .. ' \'' .. tostring(input[2]) .. '\'')
+		elseif type(input[3]) ~= 'function' or type(input[3](0)) ~= 'number' then
+			throw('invalid ease function \'' .. tostring(input[3]) .. '\'')
+		elseif input.mode ~= nil and not valid_timing_modes[input.mode] then
+			throw('invalid timing mode \'' .. tostring(input.mode) .. '\'')
+		elseif input.pn ~= nil and (input.pn < 0 or input.pn > MAX_PN or input.pn ~= math.floor(input.pn)) then
+			throw('invalid player number \'' .. tostring(input.pn) .. '\'')
+		else
+			local val = 5
+			while input[val] do
+				if type(input[val - 1]  ~= 'number') then
+					throw('invalid percentage \'' .. tostring(input[val - 1]) .. '\' for mod \'' .. tostring(input[val]) .. '\'')
+					return
+				end
+				val = val + 2
+			end
+			return true
+		end
+	end
+	
+	-- verifier for func
+	local function check_valid_func(input)
+		if type(input) ~= table then
+			throw('\'{\' expected near \'func\'')
+		elseif type(input[1] ~= 'number') then
+			throw('invalid start beat \'' .. tostring(input[1]) .. '\'')
+		elseif input[3] then
+			if type(input[2]) ~= 'number' then
+				throw('invalid '.. timing_mode .. ' \'' .. tostring(input[2]) .. '\'')
+			elseif type(input[3]) ~= 'function' then
+				throw('invalid function \'' .. tostring(input[3]) .. '\'')
+			elseif input.mode ~= nil and not valid_timing_modes[input.mode] then
+				throw('invalid timing mode \'' .. tostring(input.mode) .. '\'')
+			else
+				return true
+			end
+		elseif type(input[2]) ~= 'function' then
+			throw('invalid function \'' .. tostring(input[2]) .. '\'')
+		else
+			return true
+		end
+	end
+	
+	-- converts an ease entry to len mode
 	local function timing_mode_adjust(input)
 		local mode = input.mode or timing_mode
 		
@@ -108,24 +150,43 @@ end
 		
 	end
 	
+	-- exceptions for how to apply mods
+	local ease_vars = {}
+	
+	-- add new exceptions to ease_vars
+	function xero.ease_var(mod, value)
+		value = value or true
+		ease_vars[mod] = value
+		return xero.ease_var
+	end
+	
+	
 	-- ease table
 	local mod_ease = {}
 	local mod_ease_active = {}
 	local mod_ease_length = 0
 	local mod_ease_next = 1
-
-	-- ease table insert
-	function xero.ease(input)
+	
+	local function insert_ease(input)
 		timing_mode_adjust(input)
 		mod_ease_length = mod_ease_length + 1
 		mod_ease[mod_ease_length] = input
+	end
+	
+	-- ease table insert
+	function xero.ease(input)
+		if check_valid_ease(input, 'ease') then
+			insert_ease(input)
+		end
 		return xero.ease
 	end
 	
 	-- ease table insert, for absolute position eases
 	function xero.ease_to(input)
-		input.absolute = true
-		xero.ease(input)
+		if check_valid_ease(input, 'ease_to') then
+			input.absolute = true
+			insert_ease(input)
+		end
 		return xero.ease_to
 	end
 	
@@ -137,17 +198,15 @@ end
 	
 	-- func table insert
 	function xero.func(input)
-		
-		timing_mode_adjust(input)
-		
-		if type(input[2]) == 'function' then
-			input[2], input[3] = nil, input[2]
+		if check_valid_func(input) then
+			timing_mode_adjust(input)
+			if type(input[2]) == 'function' then
+				input[2], input[3] = nil, input[2]
+			end
+			mod_func_length = mod_func_length + 1
+			mod_func[mod_func_length] = input
 		end
-		
-		mod_func_length = mod_func_length + 1
-		mod_func[mod_func_length] = input
 		return xero.func
-		
 	end
 	
 	-- prepare mods
@@ -239,7 +298,7 @@ end
 		
 		local val = 5
 		while entry[val] do
-				entry[val - 1] = entry[val - 1] - mod_base[pn][entry[val]]
+			entry[val - 1] = entry[val - 1] - mod_base[pn][entry[val]]
 			val = val + 2
 		end
 		
