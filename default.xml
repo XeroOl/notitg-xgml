@@ -60,9 +60,9 @@
 		
 		-- full screen actor function
 		function xero.image(self)
-			actor:zoomto(SCREEN_WIDTH, SCREEN_HEIGHT)
-			actor:x(SCREEN_CENTER_X)
-			actor:y(SCREEN_CENTER_Y)
+			self:zoomto(SCREEN_WIDTH, SCREEN_HEIGHT)
+			self:x(SCREEN_CENTER_X)
+			self:y(SCREEN_CENTER_Y)
 		end
 	end
 	
