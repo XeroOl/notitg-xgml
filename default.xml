@@ -66,6 +66,11 @@
 		end
 	end
 	
+	local function throw(exception)
+		local _, err = pcall(error, exception, 4)
+		SCREENMAN:SystemMessage(err)
+	end
+	
 	-- exceptions for how to apply mods	local 
 	ease_vars = {}
 	
@@ -78,11 +83,16 @@
 	
 	-- holds the timing mode
 	local timing_mode = 'len'
+	local valid_modes = {['len'] = true, ['end'] true}
 	
 	-- setter for timing mode
 	function xero.set_timing_mode(mode)
-		timing_mode = mode
-	end
+		if valid_modes[mode] then
+			timing_mode = mode
+		else
+			throw('invalid mode ' .. mode)
+		end
+end
 	
 	-- converts an input to len mode
 	local function timing_mode_adjust(input)
