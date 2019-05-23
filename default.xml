@@ -80,7 +80,7 @@
 	-- setter for timing mode
 	function xero.set_timing_mode(mode)
 		if not valid_timing_modes[mode] then
-			throw('invalid mode \'' .. mode .. '\'', 4)
+			throw('invalid timing mode \'' .. mode .. '\'', 4)
 		else
 			timing_mode = mode
 		end
@@ -94,7 +94,7 @@
 			throw('invalid start beat \'' .. tostring(input[1]) .. '\'')
 		elseif type(input[2]) ~= 'number' then
 			throw('invalid ' .. timing_mode .. ' \'' .. tostring(input[2]) .. '\'')
-		elseif type(input[3]) ~= 'function' or type(input[3](0)) ~= 'number' then
+		elseif type(input[3]) ~= 'function' or type(input[3](0) or nil) ~= 'number' then
 			throw('invalid ease function \'' .. tostring(input[3]) .. '\'')
 		elseif input.mode ~= nil and not valid_timing_modes[input.mode] then
 			throw('invalid timing mode \'' .. tostring(input.mode) .. '\'')
@@ -102,10 +102,12 @@
 			throw('invalid player number \'' .. tostring(input.pn) .. '\'')
 		else
 			local val = 5
-			while input[val] do
-				if type(input[val - 1]  ~= 'number') then
+			while input[val] or input[val - 1] do
+				if type(input[val - 1]) ~= 'number' then
 					throw('invalid percentage \'' .. tostring(input[val - 1]) .. '\' for mod \'' .. tostring(input[val]) .. '\'')
 					return
+				elseif input[val] == nil then
+					throw('invalid mod \'nil\'')
 				end
 				val = val + 2
 			end
@@ -115,9 +117,9 @@
 	
 	-- verifier for func
 	local function check_valid_func(input)
-		if type(input) ~= table then
+		if type(input) ~= 'table' then
 			throw('\'{\' expected near \'func\'')
-		elseif type(input[1] ~= 'number') then
+		elseif type(input[1]) ~= 'number' then
 			throw('invalid start beat \'' .. tostring(input[1]) .. '\'')
 		elseif input[3] then
 			if type(input[2]) ~= 'number' then
