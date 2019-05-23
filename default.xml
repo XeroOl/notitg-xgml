@@ -87,26 +87,26 @@
 	end
 	
 	-- verifier for ease and ease_to
-	local function check_valid_ease(input, function_name)
-		if type(input) ~= 'table' then
+	local function check_valid_ease(entry, function_name)
+		if type(entry) ~= 'table' then
 			throw('\'{\' expected near \''.. function_name ..'\'')
-		elseif type(input[1]) ~= 'number' then
-			throw('invalid start beat \'' .. tostring(input[1]) .. '\'')
-		elseif type(input[2]) ~= 'number' then
-			throw('invalid ' .. timing_mode .. ' \'' .. tostring(input[2]) .. '\'')
-		elseif type(input[3]) ~= 'function' or type(input[3](0) or nil) ~= 'number' then
-			throw('invalid ease function \'' .. tostring(input[3]) .. '\'')
-		elseif input.mode ~= nil and not valid_timing_modes[input.mode] then
-			throw('invalid timing mode \'' .. tostring(input.mode) .. '\'')
-		elseif input.pn ~= nil and (input.pn < 0 or input.pn > MAX_PN or input.pn ~= math.floor(input.pn)) then
-			throw('invalid player number \'' .. tostring(input.pn) .. '\'')
+		elseif type(entry[1]) ~= 'number' then
+			throw('invalid start beat \'' .. tostring(entry[1]) .. '\'')
+		elseif type(entry[2]) ~= 'number' then
+			throw('invalid ' .. timing_mode .. ' \'' .. tostring(entry[2]) .. '\'')
+		elseif type(entry[3]) ~= 'function' or type(entry[3](0) or nil) ~= 'number' then
+			throw('invalid ease function \'' .. tostring(entry[3]) .. '\'')
+		elseif entry.mode ~= nil and not valid_timing_modes[entry.mode] then
+			throw('invalid timing mode \'' .. tostring(entry.mode) .. '\'')
+		elseif entry.pn ~= nil and (entry.pn < 0 or entry.pn > MAX_PN or entry.pn ~= math.floor(entry.pn)) then
+			throw('invalid player number \'' .. tostring(entry.pn) .. '\'')
 		else
 			local val = 5
-			while input[val] or input[val - 1] do
-				if type(input[val - 1]) ~= 'number' then
-					throw('invalid percentage \'' .. tostring(input[val - 1]) .. '\' for mod \'' .. tostring(input[val]) .. '\'')
+			while entry[val] or entry[val - 1] do
+				if type(entry[val - 1]) ~= 'number' then
+					throw('invalid percentage \'' .. tostring(entry[val - 1]) .. '\' for mod \'' .. tostring(entry[val]) .. '\'')
 					return
-				elseif input[val] == nil then
+				elseif entry[val] == nil then
 					throw('invalid mod \'nil\'')
 				end
 				val = val + 2
@@ -116,37 +116,37 @@
 	end
 	
 	-- verifier for func
-	local function check_valid_func(input)
-		if type(input) ~= 'table' then
+	local function check_valid_func(entry)
+		if type(entry) ~= 'table' then
 			throw('\'{\' expected near \'func\'')
-		elseif type(input[1]) ~= 'number' then
-			throw('invalid start beat \'' .. tostring(input[1]) .. '\'')
-		elseif input[3] then
-			if type(input[2]) ~= 'number' then
-				throw('invalid '.. timing_mode .. ' \'' .. tostring(input[2]) .. '\'')
-			elseif type(input[3]) ~= 'function' then
-				throw('invalid function \'' .. tostring(input[3]) .. '\'')
-			elseif input.mode ~= nil and not valid_timing_modes[input.mode] then
-				throw('invalid timing mode \'' .. tostring(input.mode) .. '\'')
+		elseif type(entry[1]) ~= 'number' then
+			throw('invalid start beat \'' .. tostring(entry[1]) .. '\'')
+		elseif entry[3] then
+			if type(entry[2]) ~= 'number' then
+				throw('invalid '.. timing_mode .. ' \'' .. tostring(entry[2]) .. '\'')
+			elseif type(entry[3]) ~= 'function' then
+				throw('invalid function \'' .. tostring(entry[3]) .. '\'')
+			elseif entry.mode ~= nil and not valid_timing_modes[entry.mode] then
+				throw('invalid timing mode \'' .. tostring(entry.mode) .. '\'')
 			else
 				return true
 			end
-		elseif type(input[2]) ~= 'function' then
-			throw('invalid function \'' .. tostring(input[2]) .. '\'')
+		elseif type(entry[2]) ~= 'function' then
+			throw('invalid function \'' .. tostring(entry[2]) .. '\'')
 		else
 			return true
 		end
 	end
 	
 	-- converts an ease entry to len mode
-	local function timing_mode_adjust(input)
-		local mode = input.mode or timing_mode
+	local function timing_mode_adjust(entry)
+		local mode = entry.mode or timing_mode
 		
 		-- if necessary, adjust to internal 'len' based format
-		if mode == 'end' and type(input[2]) == 'number' then
-			local adjusted_len = input[2] - input[1]
+		if mode == 'end' and type(entry[2]) == 'number' then
+			local adjusted_len = entry[2] - entry[1]
 			if adjusted_len >= 0 then
-				input[2] = adjusted_len
+				entry[2] = adjusted_len
 			end
 		end
 		
@@ -169,25 +169,26 @@
 	local mod_ease_length = 0
 	local mod_ease_next = 1
 	
-	local function insert_ease(input)
-		timing_mode_adjust(input)
+	-- insert table
+	local function insert_ease(entry)
+		timing_mode_adjust(entry)
 		mod_ease_length = mod_ease_length + 1
-		mod_ease[mod_ease_length] = input
+		mod_ease[mod_ease_length] = entry
 	end
 	
 	-- ease table insert
-	function xero.ease(input)
-		if check_valid_ease(input, 'ease') then
-			insert_ease(input)
+	function xero.ease(ease_entry)
+		if check_valid_ease(ease_entry, 'ease') then
+			insert_ease(ease_entry)
 		end
 		return xero.ease
 	end
 	
 	-- ease table insert, for absolute position eases
-	function xero.ease_to(input)
-		if check_valid_ease(input, 'ease_to') then
-			input.absolute = true
-			insert_ease(input)
+	function xero.ease_to(ease_entry)
+		if check_valid_ease(ease_entry, 'ease_to') then
+			ease_entry.absolute = true
+			insert_ease(ease_entry)
 		end
 		return xero.ease_to
 	end
@@ -199,14 +200,14 @@
 	local mod_func_next = 1
 	
 	-- func table insert
-	function xero.func(input)
-		if check_valid_func(input) then
-			timing_mode_adjust(input)
-			if type(input[2]) == 'function' then
-				input[2], input[3] = nil, input[2]
+	function xero.func(entry)
+		if check_valid_func(entry) then
+			timing_mode_adjust(entry)
+			if type(entry[2]) == 'function' then
+				entry[2], entry[3] = nil, entry[2]
 			end
 			mod_func_length = mod_func_length + 1
-			mod_func[mod_func_length] = input
+			mod_func[mod_func_length] = entry
 		end
 		return xero.func
 	end
