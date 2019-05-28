@@ -1,0 +1,7 @@
+<ActorFrame>
+	<children>
+		 <Layer File = "modhelpers.xml" />
+		<!-- <Layer File = "splines.xml" /> -->
+		<!-- <Layer File = "mod-aliases.xml" /> -->
+	</children>
+</ActorFrame>

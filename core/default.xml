@@ -86,6 +86,11 @@
 		end
 	end
 	
+	-- getter for timing mode
+	function xero.get_timing_mode()
+		return timing_mode
+	end
+	
 	-- verifier for ease and ease_to
 	local function check_valid_ease(entry, function_name)
 		if type(entry) ~= 'table' then
@@ -245,8 +250,11 @@
 			hide(top:GetChild('LifeP' .. pn))
 		end
 		
+		-- load addons
+		xero.actors.mods:playcommand('Mod')
+		
 		-- load mods
-		xero.actors.mods:playcommand'Mod'
+		xero.actors.mods:playcommand('Mod')
 		
 		-- sort tables
 		xero.stable_sort(mod_ease, function(a, b)
@@ -495,12 +503,19 @@ OnCommand = "propagate,1;queuecommand,Name;sleep,9e9"
 			InitCommand = "zoom,0;effectclock,music"
 		/>
 		
+		<!-- Load the addons -->
+		<Layer
+			File = "../addons/addons.xml"
+			NameCommand = "%xero.name.addons"
+			OnCommand = "hidden, 1"
+		/>
+		
 		<!-- Foreground actors for the modfile -->
-		<Layer File = "lua/actors.xml" />
+		<Layer File = "../lua/actors.xml" />
 		
 		<!-- Mod initialization -->
 		<Layer
-			File = "lua/mods.xml"
+			File = "../lua/mods.xml"
 			NameCommand = "%xero.name.mods"
 			OnCommand = "hidden,1"
 		/>
