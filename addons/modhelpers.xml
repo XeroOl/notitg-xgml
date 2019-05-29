@@ -4,11 +4,11 @@
 	----------------------DON'T TOUCH IT KIDDO---------------------------------------------
 	---------------------------------------------------------------------------------------
 	
+	-- perframes
 	function xero.perframe(beat, endBeat)
 		local cur = GAMESTATE:GetSongBeat()
 		return cur >= beat and cur < endBeat
 	end
-	
 	
 	--mod_insert has no parallel in XGML
 	function xero.mod_insert()
@@ -22,7 +22,7 @@
 	
 	function xero.mod_ease(beat, len, str1, str2, mod, t, ease, pn, sus)
 		sus = sus or 0
-		t = t or xero.
+		t = t or xero.get_timing_mode()
 		if t == 'end' then
 			len = len - beat
 		end
@@ -48,7 +48,7 @@
 	
 	local blacklist_cache = {}
 	function xero.mod_blacklist(t,n)
-		-- load from cache
+		-- load from cache              
 		local cache = blacklist_cache[t]
 		
 		-- build cache
@@ -78,7 +78,8 @@
 		xero.ease{beat, alive, tooth, strength, mod, pn = pn, mode = 'len'}
 	end
 	
-	function xero.simple_m0d2(beat,strength,mult,mod,pn)
+	-- not done
+	function simple_m0d2(beat,strength,mult,mod,pn)
 		if not strength then strength = 400 end
 		if not mult then mult = 1 end
 		if not mod then mod = 'drunk' end
@@ -89,6 +90,7 @@
 		table.insert(mods,{beat+.3,alive,'*'..((1/mult)*math.abs(strength)/100)..' no '..mod,'len',pn});
 	end
 	
+	-- not done
 	function simple_m0d3(beat,strength,duration,bpm,mod,pn)
 		if not strength then strength = 400 end
 		if not duration then duration = 1 end
