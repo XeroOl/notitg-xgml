@@ -251,7 +251,7 @@
 		end
 		
 		-- load addons
-		xero.actors.mods:playcommand('Mod')
+		xero.actors.addons:playcommand('Mod')
 		
 		-- load mods
 		xero.actors.mods:playcommand('Mod')
