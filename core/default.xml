@@ -1,7 +1,18 @@
 <Layer Type = "ActorFrame" InitCommand = "%function() -- By XeroOl
 	
-	-- config
+	---------------------------------------
+	------------- XGML CONFIG -------------
+	---------------------------------------
+	
+	-- number of players considered for player specific mods
 	local MAX_PN = 2
+	
+	
+	
+	
+	---------------------------------------
+	----------- END XGML CONFIG -----------
+	---------------------------------------
 	
 	local old_xero = _G.xero
 	
