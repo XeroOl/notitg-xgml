@@ -45,7 +45,7 @@
 		end
 		
 		-- dump the rest of table 2
-		while result[i2] do
+		while tab2[i2] do
 			result[n] = tab2[i2]
 			n = n + 1
 			i2 = i2 + 1
