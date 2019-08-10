@@ -448,7 +448,7 @@
 			
 			-- apply mods from mod_values
 			for pn = 0, MAX_PN do
-				local string_out = {pn == 0 and 'mod,clearall' or 'mod'}
+				local string_out = {'mod'}
 				local n = 1
 				for mod, percent in pairs(mod_values[pn]) do
 					
