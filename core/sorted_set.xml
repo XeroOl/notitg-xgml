@@ -94,7 +94,7 @@
 		end
 	end
 
-	function xero.sorted_set(comparator)
+	local function sorted_set(comparator)
 		comparator = comparator or default_comparator
 		return {
 			-- public
@@ -111,5 +111,8 @@
 			size = 0,
 		}
 	end
+	
+	xero.sorted_set = sorted_set
+	xero.stack = stack
 	
 end" />

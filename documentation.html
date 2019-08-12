@@ -1,12 +1,12 @@
 <html>
 	<head>
-		<title>XeroOl's Galaxy Mod Loader v0.5: documentation</title>
+		<title>XeroOl's Galaxy Mod Loader v1.0: documentation</title>
 		<!--Style is from Lua's Documentation-->
 		<style type="text/css">html {background-color: #F8F8F8 ;}body {background-color: #FFFFFF ;color: #000000 ;font-family: Helvetica, Arial, sans-serif ;text-align: justify ;line-height: 1.25 ;margin: 16px auto ;padding: 32px ;border: solid #ccc 1px ;border-radius: 20px ;max-width: 70em ;width: 90% ;}h1, h2, h3, h4 {color: #000080 ;font-family: Verdana, Geneva, sans-serif ;font-weight: normal ;font-style: normal ;text-align: left ;}h1 {font-size: 28pt ;}h1 img {vertical-align: text-bottom ;}h2:before {content: "\2756" ;padding-right: 0.5em ;}a {text-decoration: none ;}a:link {color: #000080 ;}a:link:hover, a:visited:hover {background-color: #D0D0FF ;color: #000080 ;border-radius: 4px ;}a:link:active, a:visited:active {color: #FF0000 ;}div.menubar {padding-bottom: 0.5em ;}p.menubar {margin-left: 2.5em ;}.menubar a:hover  {margin: -3px -3px -3px -3px ;padding: 3px  3px  3px  3px ;border-radius: 4px ;}:target {background-color: #F0F0F0 ;margin: -8px ;padding: 8px ;border-radius: 8px ;outline: none ;}hr {display: none ;}table hr {background-color: #a0a0a0 ;color: #a0a0a0 ;border: 0 ;height: 1px ;display: block ;}.footer {color: gray ;font-size: x-small ;text-transform: lowercase ;}input[type=text] {border: solid #a0a0a0 2px ;border-radius: 2em ;background-repeat: no-repeat ;background-position: 4px center ;padding-left: 20px ;height: 2em ;}pre.session {background-color: #F8F8F8 ;padding: 1em ;border-radius: 8px ;}table {border: none ;border-spacing: 0 ;border-collapse: collapse ;}td {padding: 0 ;margin: 0 ;}td.gutter {width: 4% ;}table.columns td {vertical-align: top ;padding-bottom: 1em ;text-align: justify ;line-height: 1.25 ;}table.book td {vertical-align: top ;}table.book td.cover {padding-right: 1em ;}table.book img {border: solid #000080 1px ;}table.book span {font-size: small ;text-align: left ;display: block ;margin-top: 0.25em ;}p.logos a:link:hover, p.logos a:visited:hover {background-color: inherit ;}img {background-color: white ;}h3 code {font-family: inherit ;font-size: inherit ;}pre, code {font-size: 12pt ;}span.apii {color: gray ;float: right ;font-family: inherit ;font-style: normal ;font-size: small ;}</style>
 		<meta charset="UTF-8">
 	</head>
 	<body>
-		<h1>XeroOl's Galaxy Mod Loader v0.5</h1>
+		<h1>XeroOl's Galaxy Mod Loader v1.0</h1>
 		<div class = "menubar">
 			<a href = "#introduction">Introduction</a> ·
 			<a href = "#configuration">Configuration</a> ·
@@ -16,12 +16,49 @@
 			<a href = "#eases">Eases</a> ·
 			<a href = "#addons">Addons</a>
 		</div>
+		<p>If you have any questions about this template, you can ask in the <a href = "https://discord.gg/Zt3DTb6" />UKSRT Discord</a>.</p>
 		<h2><a name = "introduction">Introduction</a></h2>
-		<p>XeroOl's Galaxy Mod Loader (XGML) is a framework for scheduling, specifying, and applying mods and other lua commands for OpenITG and NotITG. To use it, copy the contents of XGML into your song's folder. Make sure that the file <code>default.xml</code> is in the same directory as your song's <code>.sm</code>. To tell OpenITG/NotITG to activate XGML, either use the provided <code>file.sm</code>, or making sure that your <code>.sm</code> has the following line:</p>
-		<pre>	#FGCHANGES:0.000=core=1.000=0=0=1=====,;</pre>
-		<p>This line tells the game to load XGML when the song is played.</p>
+		<p>XeroOl's Galaxy Mod Loader (XGML) is a framework for scheduling, specifying, and applying mods and other lua commands for <a href = "https://openitg.gr-p.com/">OpenITG</a> and <a href = "https://notitg.heysora.net">NotITG</a>.</p>
+		<p>To use XGML, copy the contents of XGML into your song's folder. Then, in <code>Example.sm</code>, replace the default information with your song's information. Here's a list of the things you might want to swap out in the <code>.sm</code>.</p>
+<pre><code>
+	#TITLE:<b>Song's Title</b>;
+	#SUBTITLE:;
+	#ARTIST:<b>Song's Artist</b>;
+	#TITLETRANSLIT:;
+	#SUBTITLETRANSLIT:;
+	#ARTISTTRANSLIT:;
+	#GENRE:;
+	#CREDIT:;
+	#BANNER:;
+	#BACKGROUND:;
+	#LYRICSPATH:;
+	#CDTITLE:;
+	#MUSIC:<b>Name of your audio file</b>;
+	#OFFSET:<b>Song's first beat offset in seconds</b>;
+	#SAMPLESTART:40.000;
+	#SAMPLELENGTH:12.000;
+	#SELECTABLE:YES;
+	#BPMS:0.000=<b>Song's BPM</b>;
+	#STOPS:;
+	#BGCHANGES:;
+	
+	//The majority of simfile scripts and visual effects are stored here.
+	#FGCHANGES:0.000=core=1.000=0=0=1=====,
+	;
+	
+	#KEYSOUNDS:;
+	
+	//---------------dance-single - ----------------
+	#NOTES:
+	     dance-single:
+	     <b>Your Name Here</b>:
+	     Challenge:
+	     <b>Chart Difficulty Label</b>:
+	etc...
+</code></pre>
+		<p>Feel free to rename <code>Example.sm</code> to whatever you want, as long as the file extension still is <code>.sm</code>.</p>
 		<h2><a name = "configuration">Configuration</a></h2>
-		<p>You can find the configuration files at the top of <code>core/default.xml</code>. As of now, there is only one configuration option for XGML, <code><a href = "#max_pn">MAX_PN</a></code>.</p>
+		<p>You can find the configuration at the top of <code>core/default.xml</code>. As of now, there is only one configuration option for XGML, <code><a href = "#max_pn">MAX_PN</a></code>.</p>
 		<h3><a name = "max_pn"><code>MAX_PN</code></a></h3>
 		<p>The maximum number of players to process. XGML is able to support more than 2 players when used for NotITG. However, each player has extra processing cost to support. If extra players are being used, adjust the value of <code><a href = "#max_pn">MAX_PN</a></code> to reflect the number of players you plan on using. The players still need to be activated separately.</p>
 		<h2><a name = "globals">Globals</a></h2>
@@ -95,8 +132,10 @@
 		<p>Adds a new ease variable. Takes in the name of the ease variable, and an optional function. Makes the named string into an ease variable. If no function is given, the ease variables don't have any effect, which could be useful with perframes that read the value from the ease variable. If a function is given, then for every frame that the value isn't <code>0</code>, your function will be called. The first argument will be the percentage of the mod. The second argument will be the player number. If it is meant to be applied to all players, the player number will be <code>0</code>. If your function returns a string, that string will be applied as a mod to <code>ApplyGameCommand</code>. Here are some examples of ease_var.</p>
 		<pre>	<br />	-- ease var with no effect (useful for perframes)<br />	ease_var('blacksphere')<br />	<br />	-- ease var to ease properties of non-player actors<br />	ease_var('background_rotation', function(percent)<br />	    <br />	    actors.background:rotationz(percent)<br />	    <br />	end)<br />	<br />	-- ease var to ease properties of players<br />	ease_var('fov', function(percent, pn)<br />	    <br />	    if pn == 0 then<br />	        -- 0 means all players<br />	        <br />	        for i = 1, MAX_PN do<br />	            plr[i]:fov(percent)<br />	        end<br />	        <br />	    else<br />	        -- specific player<br />	        plr[pn]:fov(percent)<br />	        <br />	    end<br />	    <br />	end)<br />	<br />	-- ease var for mod string format exceptions<br />	ease_var('xmod', function(percent)<br />	    <br />	    return '*-1 ' .. percent .. 'x'<br />	    <br />	end)</pre>
 		<p>The last example is actually how XGML handles the <code>xmod</code> and <code>cmod</code> mod string exceptions internally.</p>
-		<h3><a name = "func"><code>func {start_beat, [end_beat,] my_function}</code></a></h3>
-		<p>Adds a function as either a perframe or a one-time function. If no <code>end_beat</code> is provided, the function is scheduled to run once, as close as possible to <code>start_beat</code>. This means that all one-time functions are persistent. If you want a function to not behave persistently, then the function can check the beat and only run in a given range. Functions take in a couple of arguments.</p>
+		<h3><a name = "func"><code>func {start_beat, [length,] my_function [, late = true]}</code></a></h3>
+		<p>Adds a function as either a perframe or a one-time function. If no <code>length</code> is provided, <code>my_function</code> is scheduled to run once, as close as possible to <code>start_beat</code>.</p>
+		<p>With a length provided, <code>my_function</code> will get called any time the beat is in range. If multiple perframes are scheduled with ranges that overlap, unless the <code>late = true</code> flag is specified, the order they will be called back is the order that they were registered. Adding <code>late = true</code> to the entry will make the perframe in that entry to be called after all other perframes whose beat ranges overlap. The flag <code>late = true</code> does nothing to single-time functions.</p>
+		<p><code>my_function</code> can take in a couple of arguments.</p>
 		<ul>
 			<li><code><b>[1]</b> <b>beat</b></code>: The number of beats that have passed <b>since start_beat</b>.</li>
 			<li><code><b>[2]</b> <b>mods</b></code>: A table that represents all the currently active mods. </li>
@@ -129,6 +168,10 @@
 		</td>
 		</tbody></table>
 		<h2><a name = "addons">Add-ons</a></h2>
-		<p>Information about add-ons is coming in XGML v0.5.1.</p>
+		<p>You can add add-ons to work with XGML that extend the functionality of XGML. To activate an add-on, you need to download it and put it in the <code>addons/</code> folder. Then, you need to add it to the list in <code>addons/addons.xml</code>.</p>
+		<p>If the add-on's name is <code>foo.xml</code>, you need to add </p>
+		<pre>&lt;Layer File = "foo.xml" /&gt;</pre>
+		<p> to <code>addons/addons.xml</code> to activate the add-on.</p>
+		<p>There is an <a href = "https://github.com/XeroOl/notitg-xgml-addons"/>official repository</a> of supported add-ons. If you need help with an add-on, open the add-on file to read its documentation, or ask on the <a href = "https://discord.gg/Zt3DTb6" />UKSRT Discord</a>.</p>
 	</body>
 </html>

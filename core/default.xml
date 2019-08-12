@@ -37,6 +37,8 @@
 		
 		xero.MAX_PN = MAX_PN
 		
+		xero.xero = xero
+		
 	end
 	
 	do -- actor helpers
@@ -488,8 +490,10 @@
 			
 			-- apply mods from mod_values
 			for pn = 0, MAX_PN do
+				
 				local string_out = {apply_modifiers_prefix}
 				local n = apply_modifiers_prefix_presence
+				
 				for mod, percent in pairs(mod_values[pn]) do
 					
 					-- if mod is an exception
@@ -506,7 +510,9 @@
 						n = n + 1
 						string_out[n] = '*9e9 ' .. percent .. ' ' .. mod
 					end
+					
 				end
+				
 				if pn == 0 then
 					-- all-player mods
 					apply_modifiers(GAMESTATE, table.concat(string_out, ','))
@@ -514,6 +520,7 @@
 					-- player specific
 					apply_modifiers(GAMESTATE, table.concat(string_out, ','), pn)
 				end
+				
 			end
 			
 		end
@@ -530,6 +537,7 @@
 		xero.update = nil
 		xero.ready = nil
 		xero.name = nil
+		xero.cleanup = nil
 		
 		-- clean up global
 		_G.xero = old_xero
@@ -541,12 +549,12 @@ OnCommand = "propagate,1;queuecommand,Name;sleep,9e9"
 >
 	<children>
 		
-		<!-- Helper files -->
+		<!-- Load other core files -->
 		<Layer File = "stable_sort.xml" />
 		<Layer File = "sorted_set.xml" />
 		<Layer File = "easing.xml" />
 		
-		<!-- Actor for running the Update loop without propagating to children -->
+		<!-- Create an Actor for running the Update loop without propagating to children -->
 		<Layer
 			Type = "Quad"
 			NameCommand = "queuecommand,Ready"
@@ -562,17 +570,19 @@ OnCommand = "propagate,1;queuecommand,Name;sleep,9e9"
 			OnCommand = "hidden, 1"
 		/>
 		
-		<!-- Foreground actors for the modfile -->
+		<!-- Load the user's foreground actors. -->
 		<Layer File = "../lua/actors.xml" />
 		
-		<!-- Mod initialization -->
+		<!-- Load the user's mods -->
 		<Layer
 			File = "../lua/mods.xml"
 			NameCommand = "%xero.name.mods"
 			OnCommand = "hidden,1"
 		/>
 		
-		<!-- Doesn't get added to scene -->
+		<!-- Clean up the globals used for XML initialization -->
 		<Layer Condition = "xero.cleanup()" />
+		
+		
 	</children>
 </Layer>
