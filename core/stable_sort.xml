@@ -1,4 +1,4 @@
-<Layer Condition = "(function() -- By XeroOl
+<Layer InitCommand = "%function() -- By XeroOl
 	
 	-- merge tab1 with tab2, where tab1 has priority over tab2
 	local function merge(tab1, tab2, comparator)
@@ -140,4 +140,4 @@
 		end
 	end
 	
-end)()"/>
+end"/>

@@ -1,0 +1,115 @@
+<Layer InitCommand = "%function() -- By XeroOl
+	
+	local function push(self, val)
+		self.size = self.size + 1
+		self[self.size] = val
+	end
+
+	local function pop(self)
+		local val = self[self.size]
+		self[self.size] = nil -- for garbage collector
+		self.size = self.size - 1
+		return val
+	end
+
+	local function peek(self)
+		return self[self.size]
+	end
+
+	local function empty(self)
+		return self.size == 0
+	end
+
+	local function sort(self, comparator)
+		table.sort(self, comparator)
+	end
+
+	local function stack()
+		return {
+			-- public
+			push = push,
+			pop = pop,
+			peek = peek,
+			empty = empty,
+			sort = sort,
+			-- private
+			size = 0,
+		}
+	end
+
+	local function next(self)
+		
+		if self:empty() then
+			return
+		end
+		
+		local swap = self.swap
+		local stage = self.stage
+		local list = self.list
+		local comparator = self.comparator
+		
+		if swap:empty() then
+			stage:sort(self.reverse_comparator)
+		end
+		
+		if stage:empty() then
+			if list:empty() then
+				while not swap:empty() do
+					list:push(swap:pop())
+				end
+			else
+				swap:push(list:pop())
+			end
+		else
+			if list:empty() then
+				swap:push(stage:pop())
+			else
+				if comparator(list:peek(), stage:peek()) then
+					swap:push(list:pop())
+				else
+					swap:push(stage:pop())
+				end
+			end
+		end
+		return swap:peek()
+	end
+
+	local function remove(self)
+		self.size = self.size - 1
+		self.swap:pop()
+	end
+
+	local function add(self, obj)
+		self.size = self.size + 1
+		self.stage:push(obj)
+	end
+	
+	local function default_comparator(a, b)
+		return a < b
+	end
+
+	local function flip(comparator)
+		return function(a, b)
+			return comparator(b, a)
+		end
+	end
+
+	function xero.sorted_set(comparator)
+		comparator = comparator or default_comparator
+		return {
+			-- public
+			add = add,
+			next = next,
+			remove = remove,
+			empty = empty,
+			-- private
+			comparator = comparator,
+			reverse_comparator = flip(comparator),
+			stage = stack(),
+			list = stack(),
+			swap = stack(),
+			size = 0,
+		}
+	end
+	
+end" />

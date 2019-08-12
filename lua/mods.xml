@@ -17,5 +17,6 @@
 	end
 	]]
 	
-	
+	local function build(a, late)local p p = {0, 1000, function() print(a, p.priority) end, late = late} return p end
+	func(build('last',true))(build'a')(build('f',true))(build'b')(build('e',true))(build'c')(build('d', true))
 end)"/>

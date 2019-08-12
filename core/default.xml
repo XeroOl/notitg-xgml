@@ -178,7 +178,6 @@
 		return xero.ease_var
 	end
 	
-	
 	-- ease table
 	local mod_ease = {}
 	local mod_ease_active = {}
@@ -211,7 +210,7 @@
 	
 	-- func table
 	local mod_func = {}
-	local mod_func_active = {}
+	local mod_func_active -- forward declared, defined in xero.ready
 	local mod_func_length = 0
 	local mod_func_next = 1
 	
@@ -219,6 +218,11 @@
 	function xero.func(entry)
 		if check_valid_func(entry) then
 			timing_mode_adjust(entry)
+			
+			-- get priority
+			entry.priority = entry.late and -(mod_func_length + 1) or (mod_func_length + 1)
+			entry.late = nil
+			
 			if type(entry[2]) == 'function' then
 				entry[2], entry[3] = nil, entry[2]
 			end
@@ -231,9 +235,15 @@
 	-- prepare mods
 	function xero.ready(self)
 		
-		-- apply default mods
-		xero.ease_var('xmod', function(percent) return '*9e9 ' .. percent .. 'x' end)
-		xero.ease_var('cmod', function(percent) return '*9e9 c' .. percent end)
+		-- initialize mod_func_active
+		mod_func_active = xero.sorted_set(function(a, b)
+			a, b = a.priority, b.priority
+			if a > 0 and b > 0 or a < 0 and b < 0 then
+				return a < b
+			else
+				return b > a
+			end
+		end)
 		
 		local function hide(actor)
 			if actor then
@@ -242,6 +252,14 @@
 		end
 		
 		local top = SCREENMAN:GetTopScreen()
+		
+		-- hide extra stuff
+		hide(top:GetChild('Overlay'))
+		hide(top:GetChild('Underlay'))
+		for pn = 1, 2 do
+			hide(top:GetChild('ScoreP' .. pn))
+			hide(top:GetChild('LifeP' .. pn))
+		end
 		
 		-- create player table
 		xero.plr = {}
@@ -253,13 +271,11 @@
 		-- plr 0 guaranted to exist for notedata
 		xero.plr[0] = xero.plr[1] or xero.plr[2]
 		
-		-- hide extra stuff
-		hide(top:GetChild('Overlay'))
-		hide(top:GetChild('Underlay'))
-		for pn = 1, 2 do
-			hide(top:GetChild('ScoreP' .. pn))
-			hide(top:GetChild('LifeP' .. pn))
-		end
+		-- apply default mods
+		xero.ease_var('xmod', function(percent) return '*9e9 ' .. percent .. 'x' end)
+		xero.ease_var('cmod', function(percent) return '*9e9 c' .. percent end)
+		
+
 		
 		-- load addons
 		xero.actors.addons:playcommand('Mod')
@@ -419,7 +435,9 @@
 					break
 				end
 				if entry[2] then
-					mod_func_active[mod_func_next] = entry
+					if beat < entry[1] + entry[2] then
+						mod_func_active:add(entry)
+					end
 				else
 					entry[3](beat - entry[1], mod_values, mod_base)
 				end
@@ -428,11 +446,16 @@
 			end
 			
 			-- active mod funcs
-			for key, entry in pairs(mod_func_active) do
+			while true do
+				local entry = mod_func_active:next()
+				if not entry then
+					break
+				end
+				
 				if beat < entry[1] + entry[2] then
 					entry[3](beat - entry[1], mod_values, mod_base)
 				else
-					mod_func_active[key] = nil
+					mod_func_active:delete()
 				end
 			end
 			
@@ -502,7 +525,8 @@ OnCommand = "propagate,1;queuecommand,Name;sleep,9e9"
 	<children>
 		
 		<!-- Helper files -->
-		<Layer File = "sort.xml" />
+		<Layer File = "stable_sort.xml" />
+		<Layer File = "sorted_set.xml" />
 		<Layer File = "easing.xml" />
 		
 		<!-- Actor for running the Update loop without propagating to children -->
