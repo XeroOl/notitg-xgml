@@ -14,6 +14,8 @@
 	----------- END XGML CONFIG -----------
 	---------------------------------------
 	
+	local GAMESTATE = GAMESTATE
+	
 	local old_xero = _G.xero
 	
 	-- global for xml setup and environment for Lua
@@ -387,6 +389,21 @@
 		
 	end
 	
+	-- apply modifiers parameters
+	local apply_modifiers_prefix
+	local apply_modifiers_prefix_presence
+	local apply_modifiers
+	
+	if GAMESTATE.ApplyModifiers then
+		apply_modifiers_prefix = nil
+		apply_modifiers_prefix_presence = 0
+		apply_modifiers = GAMESTATE.ApplyModifiers
+	else
+		apply_modifiers_prefix = 'mod'
+		apply_modifiers_prefix_presence = 1
+		apply_modifiers = GAMESTATE.ApplyGameCommand
+	end
+	
 	-- update command
 	function xero.update(self)
 		cur_time = self:GetSecsIntoEffect()
@@ -471,8 +488,8 @@
 			
 			-- apply mods from mod_values
 			for pn = 0, MAX_PN do
-				local string_out = {'mod'}
-				local n = 1
+				local string_out = {apply_modifiers_prefix}
+				local n = apply_modifiers_prefix_presence
 				for mod, percent in pairs(mod_values[pn]) do
 					
 					-- if mod is an exception
@@ -492,10 +509,10 @@
 				end
 				if pn == 0 then
 					-- all-player mods
-					GAMESTATE:ApplyGameCommand(table.concat(string_out, ','))
+					apply_modifiers(GAMESTATE, table.concat(string_out, ','))
 				elseif n > 1 then
 					-- player specific
-					GAMESTATE:ApplyGameCommand(table.concat(string_out, ','), pn)
+					apply_modifiers(GAMESTATE, table.concat(string_out, ','), pn)
 				end
 			end
 			
