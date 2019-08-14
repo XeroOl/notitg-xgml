@@ -276,6 +276,7 @@
 		xero.plr[0] = xero.plr[1] or xero.plr[2]
 		
 		-- apply default mods
+		xero.func {0, function() GAMESTATE:ApplyGameCommand'mod,clearall' end}
 		xero.ease_var('xmod', function(percent) return '*9e9 ' .. percent .. 'x' end)
 		xero.ease_var('cmod', function(percent) return '*9e9 c' .. percent end)
 		
