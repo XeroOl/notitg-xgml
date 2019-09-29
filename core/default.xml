@@ -475,7 +475,7 @@
 				if beat < entry[1] + entry[2] then
 					entry[3](beat - entry[1], mod_values, mod_base)
 				else
-					mod_func_active:delete()
+					mod_func_active:remove()
 				end
 			end
 			
