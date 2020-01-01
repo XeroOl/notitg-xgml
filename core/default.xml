@@ -517,7 +517,7 @@
 				if pn == 0 then
 					-- all-player mods
 					apply_modifiers(GAMESTATE, table.concat(string_out, ','))
-				elseif n > 1 then
+				elseif n > apply_modifiers_prefix_presence then
 					-- player specific
 					apply_modifiers(GAMESTATE, table.concat(string_out, ','), pn)
 				end
